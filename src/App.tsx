@@ -6,7 +6,9 @@ const App = () => {
     return (
         <Layout>
             <Routes>
-                <Route path={"/"} element={<Home />} />
+                {["/", "/contacts"].map((path) => (
+                    <Route path={path} element={<Home />} />
+                ))}
                 <Route path={"/contacts/add"} element={<Home />} />
                 <Route path="*" element={<h1>Not Found</h1>} />
             </Routes>
