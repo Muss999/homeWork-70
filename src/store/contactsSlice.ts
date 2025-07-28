@@ -1,14 +1,16 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { TypeContact } from "../types";
-import { getContacts } from "./contactsThunk";
+import { addContact, getContacts } from "./contactsThunk";
 
 interface State {
     items: TypeContact[];
     getContactsFetching: boolean;
+    addContactsFetching: boolean;
 }
 const initialState: State = {
     items: [],
     getContactsFetching: false,
+    addContactsFetching: false,
 };
 
 const contactsSlice = createSlice({
@@ -29,13 +31,28 @@ const contactsSlice = createSlice({
         builder.addCase(getContacts.rejected, (state) => {
             state.getContactsFetching = false;
         });
+
+        builder
+            .addCase(addContact.pending, (state) => {
+                state.addContactsFetching = true;
+            })
+            .addCase(addContact.fulfilled, (state) => {
+                state.addContactsFetching = false;
+            })
+            .addCase(addContact.rejected, (state) => {
+                state.addContactsFetching = false;
+            });
     },
     selectors: {
         selectContacts: (state) => state.items,
-        selectContactsFetching: (state) => state.getContactsFetching,
+        selectGetContactsFetching: (state) => state.getContactsFetching,
+        selectAddContactsFetching: (state) => state.addContactsFetching,
     },
 });
 
 export const contactsReducer = contactsSlice.reducer;
-export const { selectContacts, selectContactsFetching } =
-    contactsSlice.selectors;
+export const {
+    selectContacts,
+    selectGetContactsFetching,
+    selectAddContactsFetching,
+} = contactsSlice.selectors;

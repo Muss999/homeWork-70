@@ -1,5 +1,9 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import type { TypeContact, TypeContactsList } from "../types";
+import type {
+    TypeContact,
+    TypeContactMutation,
+    TypeContactsList,
+} from "../types";
 import axiosApi from "../axiosApi";
 
 export const getContacts = createAsyncThunk<TypeContact[]>(
@@ -17,5 +21,11 @@ export const getContacts = createAsyncThunk<TypeContact[]>(
             }));
         }
         return newContacts;
+    }
+);
+export const addContact = createAsyncThunk<void, TypeContactMutation>(
+    "contacts/add",
+    async (apiContact) => {
+        await axiosApi.post("/contacts.json", apiContact);
     }
 );

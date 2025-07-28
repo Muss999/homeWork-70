@@ -3,7 +3,7 @@ import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import Spinner from "../../components/Spinner/Spinner";
 import {
     selectContacts,
-    selectContactsFetching,
+    selectGetContactsFetching,
 } from "../../store/contactsSlice";
 import ContactItem from "./ContactItem";
 import { getContacts } from "../../store/contactsThunk";
@@ -13,7 +13,7 @@ import type { TypeContact } from "../../types";
 const ContactsList = () => {
     const dispatch = useAppDispatch();
     const contacts = useAppSelector(selectContacts);
-    const fetchLoading = useAppSelector(selectContactsFetching);
+    const fetchLoading = useAppSelector(selectGetContactsFetching);
 
     const [selectedContact, setSelectedContact] = useState<TypeContact | null>(
         null
