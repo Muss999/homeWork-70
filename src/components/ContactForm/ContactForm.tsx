@@ -28,8 +28,36 @@ const ContactForm = ({ onSubmit, isLoading = false }: Props) => {
     };
     const onSubmitHandler = (event: FormEvent) => {
         event.preventDefault();
-        console.log(contact);
-        onSubmit(contact);
+        const contactName = contact.name.trim();
+        const contactEmail = contact.email.trim();
+        const contactNumber = contact.contactNumber.trim();
+        const contactImage = contact.image.trim();
+
+        const isPhoneNumeric = contactNumber
+            .split("")
+            .every((char) => "0123456789".includes(char));
+
+        if (!contactName) {
+            alert("Name input is not valid");
+            return;
+        } else if (!contactEmail) {
+            alert("Email input is not valid");
+            return;
+        } else if (!contactNumber || !isPhoneNumeric) {
+            alert("Phone number is not valid");
+            return;
+        } else if (!contactImage) {
+            alert("Image input is not valid");
+            return;
+        }
+
+        const newContact: TypeContactMutation = {
+            name: contactName,
+            email: contactEmail,
+            contactNumber: contact.contactNumber.trim(),
+            image: contactImage,
+        };
+        onSubmit(newContact);
     };
 
     return (
@@ -84,16 +112,19 @@ const ContactForm = ({ onSubmit, isLoading = false }: Props) => {
                     required
                 />
             </div>
-            <div className="me-3 mb-3">
+            <div className="mb-3">
                 <img
-                    src={contact.image}
-                    alt={contact.name}
+                    src={
+                        contact.image ||
+                        "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
+                    }
+                    alt={contact.name || "Preview"}
                     className="img-thumbnail"
                     style={{
-                        width: "72px",
-                        height: "72px",
-                        minWidth: "72px",
-                        minHeight: "72px",
+                        width: "100px",
+                        height: "100px",
+                        minWidth: "100px",
+                        minHeight: "100px",
                         objectFit: "cover",
                     }}
                 />
