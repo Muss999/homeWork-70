@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import Spinner from "../../components/Spinner/Spinner";
 import {
@@ -7,26 +7,47 @@ import {
 } from "../../store/contactsSlice";
 import ContactItem from "./ContactItem";
 import { getContacts } from "../../store/contactsThunk";
+import ContactDetails from "../ContactDetails/ContactDetails";
+import type { TypeContact } from "../../types";
 
 const ContactsList = () => {
     const dispatch = useAppDispatch();
     const contacts = useAppSelector(selectContacts);
     const fetchLoading = useAppSelector(selectContactsFetching);
-    console.log(contacts);
+
+    const [selectedContact, setSelectedContact] = useState<TypeContact | null>(
+        null
+    );
+
     useEffect(() => {
         dispatch(getContacts());
     }, [dispatch]);
 
+    const contactItemClick = (contact: TypeContact) => {
+        setSelectedContact(contact);
+    };
+
+    const closeModal = () => setSelectedContact(null);
+
     return (
-        <div className="d-flex flex-column gap-3 w-50">
+        <>
             {fetchLoading ? (
                 <Spinner />
+            ) : contacts.length > 0 ? (
+                <div className="d-flex flex-column gap-3 w-50">
+                    {contacts.map((contact) => (
+                        <ContactItem
+                            contact={contact}
+                            key={contact.id}
+                            contactItemClick={() => contactItemClick(contact)}
+                        />
+                    ))}
+                </div>
             ) : (
-                contacts.map((contact) => {
-                    return <ContactItem contact={contact} key={contact.id} />;
-                })
+                <div className="alert alert-warning">Contacts are empty!</div>
             )}
-        </div>
+            <ContactDetails onClose={closeModal} contact={selectedContact} />
+        </>
     );
 };
 
