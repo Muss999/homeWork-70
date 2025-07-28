@@ -6,6 +6,8 @@ import { useState, type ChangeEvent, type FormEvent } from "react";
 interface Props {
     onSubmit: (contact: TypeContactMutation) => void;
     isLoading?: boolean;
+    isContact?: TypeContactMutation;
+    isEdit?: boolean;
 }
 const initialState: TypeContactMutation = {
     name: "",
@@ -14,9 +16,14 @@ const initialState: TypeContactMutation = {
     contactNumber: "",
 };
 
-const ContactForm = ({ onSubmit, isLoading = false }: Props) => {
+const ContactForm = ({
+    onSubmit,
+    isLoading = false,
+    isContact = initialState,
+    isEdit = false,
+}: Props) => {
     const navigate = useNavigate();
-    const [contact, setContact] = useState<TypeContactMutation>(initialState);
+    const [contact, setContact] = useState<TypeContactMutation>(isContact);
 
     const changeContact = (event: ChangeEvent<HTMLInputElement>) => {
         const { name, value } = event.target;
@@ -62,7 +69,7 @@ const ContactForm = ({ onSubmit, isLoading = false }: Props) => {
 
     return (
         <form onSubmit={onSubmitHandler}>
-            <h4>Add new contact</h4>
+            <h4>{isEdit ? "Edit contact" : "Add new contact"}</h4>
             <div className="form-group">
                 <label htmlFor="name">Name</label>
                 <input

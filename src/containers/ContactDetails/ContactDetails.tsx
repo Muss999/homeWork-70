@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import type { TypeContact } from "../../types";
 
 interface Props {
@@ -7,6 +8,7 @@ interface Props {
 
 const ContactDetails = ({ onClose, contact }: Props) => {
     if (!contact) return null;
+    const navigate = useNavigate();
 
     return (
         <>
@@ -57,7 +59,10 @@ const ContactDetails = ({ onClose, contact }: Props) => {
                             <button
                                 type="button"
                                 className="btn btn-warning"
-                                onClick={onClose}
+                                onClick={() => {
+                                    onClose();
+                                    navigate(`/contacts/${contact.id}/edit`);
+                                }}
                             >
                                 Edit
                             </button>
