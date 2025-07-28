@@ -57,3 +57,10 @@ export const fetchOneContact = createAsyncThunk<TypeContactMutation, string>(
         return contact;
     }
 );
+
+export const deleteContact = createAsyncThunk<void, string>(
+    "contacts/delete",
+    async (id) => {
+        await axiosApi.delete(`/contacts/${id}.json`);
+    }
+);

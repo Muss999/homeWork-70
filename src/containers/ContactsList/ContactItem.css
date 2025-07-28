@@ -1,6 +1,7 @@
 .contactItem {
     cursor: pointer;
     transition: 0.5s;
+    width: 49%;
 }
 .contactItem:hover {
     background-color: #f0f0f0;

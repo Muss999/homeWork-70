@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import type { TypeContact, TypeContactMutation } from "../types";
 import {
     addContact,
+    deleteContact,
     editContactThunk,
     fetchOneContact,
     getContacts,
@@ -14,6 +15,7 @@ interface State {
     addContactsFetching: boolean;
     editContactFetching: boolean;
     fetchOneLoading: boolean;
+    deleteContactFetching: boolean | string;
 }
 const initialState: State = {
     items: [],
@@ -22,6 +24,7 @@ const initialState: State = {
     addContactsFetching: false,
     editContactFetching: false,
     fetchOneLoading: false,
+    deleteContactFetching: false,
 };
 
 const contactsSlice = createSlice({
@@ -80,6 +83,17 @@ const contactsSlice = createSlice({
             .addCase(fetchOneContact.rejected, (state) => {
                 state.fetchOneLoading = false;
             });
+
+        builder
+            .addCase(deleteContact.pending, (state, { meta }) => {
+                state.deleteContactFetching = meta.arg;
+            })
+            .addCase(deleteContact.fulfilled, (state) => {
+                state.deleteContactFetching = false;
+            })
+            .addCase(deleteContact.rejected, (state) => {
+                state.deleteContactFetching = false;
+            });
     },
     selectors: {
         selectContacts: (state) => state.items,
@@ -87,6 +101,7 @@ const contactsSlice = createSlice({
         selectAddContactsFetching: (state) => state.addContactsFetching,
         selectEditContactFetching: (state) => state.editContactFetching,
         selectOneContactLoading: (state) => state.fetchOneLoading,
+        selectDeleteContactFetching: (state) => state.deleteContactFetching,
         selectOneContact: (state) => state.oneContact,
     },
 });
@@ -98,5 +113,6 @@ export const {
     selectAddContactsFetching,
     selectEditContactFetching,
     selectOneContact,
+    selectDeleteContactFetching,
     selectOneContactLoading,
 } = contactsSlice.selectors;

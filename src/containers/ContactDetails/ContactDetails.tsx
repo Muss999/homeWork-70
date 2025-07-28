@@ -1,13 +1,20 @@
 import { useNavigate } from "react-router-dom";
 import type { TypeContact } from "../../types";
+import SpinnerButton from "../../components/Spinner/SpinnerButton";
 
 interface Props {
     onClose: () => void;
-    contact: TypeContact | null;
+    contact: TypeContact;
+    onDelete: () => void;
+    deleteLoading: boolean | string;
 }
 
-const ContactDetails = ({ onClose, contact }: Props) => {
-    if (!contact) return null;
+const ContactDetails = ({
+    onClose,
+    contact,
+    onDelete,
+    deleteLoading,
+}: Props) => {
     const navigate = useNavigate();
 
     return (
@@ -69,8 +76,20 @@ const ContactDetails = ({ onClose, contact }: Props) => {
                             <button
                                 type="button"
                                 className="btn btn-danger"
-                                onClick={onClose}
+                                onClick={() => {
+                                    onClose();
+                                    onDelete();
+                                }}
+                                disabled={
+                                    deleteLoading
+                                        ? deleteLoading === contact.id
+                                        : false
+                                }
                             >
+                                {deleteLoading &&
+                                    deleteLoading === contact.id && (
+                                        <SpinnerButton />
+                                    )}
                                 Delete
                             </button>
                         </div>
